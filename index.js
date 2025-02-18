@@ -37,7 +37,7 @@ server.use(express.json());
 //Api root ,base URL
 //crete 
 
-
+//this is  delete reqiest are  there
 server.delete('/products/:id',(req,res)=>{
     
     const id = +req.params.id;
