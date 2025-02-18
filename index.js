@@ -5,16 +5,19 @@ const index = fs.readFileSync('index.html','UTF-8');
 const data = JSON.parse(fs.readFileSync('data.json','UTF-8'));
 const products = data.products;
 
+
 // const express = require('express');
 const { type } = require('os');
 
 const express = require('express');
 const morgan = require('morgan');
 const server = express();
+server.use(express.json());
+
 
 //middlewere  concept start
 //bodyParser
-server.use(express.json());
+
 // server.use((req,res,next)=>{
 //     console.log(req.method ,req.ip, req.hostname,new Date() , req.get('user-Agent'))
 //     next()
@@ -37,8 +40,25 @@ server.use(express.json());
 //Api root ,base URL
 //crete 
 
-//this is  delete reqiest are  there
-server.delete('/products/:id',(req,res)=>{
+const getonProduct = (req,res)=>{
+       res.json(products);
+}
+    
+
+const getProduct = (req,res)=>{
+    
+    const id = +req.params.id;
+    const product = products.find(p =>p.id===id)
+    res.json(product)
+ }
+
+ const addProduct = (req,res)=>{
+   
+       products.push(req.body)
+        res.json({type:body});
+ }
+
+ const delProduct = (req,res)=>{
     
     const id = +req.params.id;
     const productIndex = products.findIndex(p =>p.id===id)
@@ -46,13 +66,21 @@ server.delete('/products/:id',(req,res)=>{
 
     products.splice(productIndex,1)
     res.status(201).json(product);
+    
 
 
+}
 
+const replaceProduct = (req,res)=>{
+    
+    const id = +req.params.id;
+    const productIndex = products.findIndex(p =>p.id===id)
+    const product = products[productIndex];
+    products.splice(productIndex,1,{...product,...req.body})
+    res.status(201).json();
+}
 
-});
-
-server.put('/products/:id',(req,res)=>{
+const updateproduct = (req,res)=>{
     
     const id = +req.params.id;
     const productIndex = products.findIndex(p =>p.id===id)
@@ -60,15 +88,24 @@ server.put('/products/:id',(req,res)=>{
     res.status(201).json();
 
 
-})
-//update
-server.patch('/products/:id',(req,res)=>{
+}
+
+
+
+
+server.get('/products',getonProduct)
     
-    const id = +req.params.id;
-    const productIndex = products.findIndex(p =>p.id===id)
-    const product = products[productIndex];
-    products.splice(productIndex,1,{...product,...req.body})
-    res.status(201).json();
+
+server.get('/products/:id', getProduct)
+
+server.post('/products', addProduct)
+
+
+server.delete('/products/:id',delProduct);
+
+server.put('/products/:id',updateproduct)
+
+server.patch('/products/:id',replaceProduct
 
     //delete
     // server.delete('/products/:id',(req,res)=>{
@@ -85,21 +122,14 @@ server.patch('/products/:id',(req,res)=>{
     
     // })
 
-
+//read get product
 // server.get('/products',(req,res)=>{
 //     res.json(products);
 
 
 
-})
-server.get('/products/:id',(req,res)=>{
-    
-   const id = +req.params.id;
-   const product = products.find(p =>p.id===id)
-   res.json(product)
+);
 
-
-})
 //create API POST
 // server.post('/products',(req,res)=>{
 //     console.log(req.body);
@@ -143,6 +173,8 @@ server.get('/demo',(req,res)=>{
 server.listen(8088, ()=>{
     console.log("server started..")
 });
+
+
 
 
 
