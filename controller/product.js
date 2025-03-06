@@ -1,8 +1,10 @@
 
-const fs = require('fs');
-// const index = fs.readFileSync('index.html','UTF-8');
-const data = JSON.parse(fs.readFileSync('data.json','UTF-8'));
-const products = data.products;
+ const fs = require('fs');
+ const  model = require('../model/product')
+ 
+// // const index = fs.readFileSync('index.html','UTF-8');
+// const data = JSON.parse(fs.readFileSync('data.json','UTF-8'));
+ const Product = model.Product;
 
 
 
@@ -20,9 +22,20 @@ exports.getProduct = (req,res)=>{
 
  exports.addProduct = (req,res)=>{
    
-       products.push(req.body)
-        res.json({type:body});
- }
+    const product = new Product();
+    product.title = 'phoneX';
+    product.price ='9999';
+    product.rating=5;
+    
+
+    product.save((err,doc)=>{
+        console.log({err,doc})
+    })
+        res.status(201).json(req.body);
+ };
+
+
+
 
  exports.delProduct = (req,res)=>{
     
