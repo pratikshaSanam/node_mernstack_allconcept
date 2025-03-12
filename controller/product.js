@@ -20,19 +20,18 @@ exports.getProduct = (req,res)=>{
     res.json(product)
  }
 
- exports.addProduct = (req,res)=>{
-   
-    const product = new Product();
-    product.title = 'phoneX';
-    product.price ='9999';
-    product.rating=5;
-    
+ exports.addProduct = async (req, res) => {
+    try {
+        const product = new Product(req.body); // Create a new product instance
+        const savedProduct = await product.save(); // Save product to DB
+        res.status(201).json(savedProduct); // Send response with saved product
+    } catch (err) {
+        res.status(500).json({ error: err.message }); // Handle errors
+    }
+};
 
-    product.save((err,doc)=>{
-        console.log({err,doc})
-    })
-        res.status(201).json(req.body);
- };
+
+ 
 
 
 
