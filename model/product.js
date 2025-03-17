@@ -5,14 +5,14 @@ const { Schema } = mongoose;
 
 
 const productSchema = new Schema({
-  title: String,
+  title: {type:String , required:true},
   description: String,
-  category: String,
-  price: Number,
-  discountPercentage: Number,
-  rating: Number,
-  brand: String,
-  thumbnail: String,
+  category: { type:String, required:true},
+  price: {type:Number,min:[0,'wrong  prise'], required:true} ,
+  discountPercentage: {type:Number,min:[0,'wrong min discount'],max:[50,'wrong max discount']} ,
+  rating: {type:Number,min:[0,'wrong min rating'],max:[5,'wrong max rating']} ,
+  brand:{ type:String, required:true},
+  thumbnail: { type:String, required:true},
   images: [String],
 });
 

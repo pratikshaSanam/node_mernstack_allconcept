@@ -26,7 +26,7 @@ exports.getProduct = (req,res)=>{
         const savedProduct = await product.save(); // Save product to DB
         res.status(201).json(savedProduct); // Send response with saved product
     } catch (err) {
-        res.status(500).json({ error: err.message }); // Handle errors
+        res.status(400).json({ error: err.message }); // Handle errors
     }
 };
 
