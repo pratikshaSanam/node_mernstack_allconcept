@@ -3,12 +3,14 @@ require('dotenv').config()
 
 const express = require('express');
 const fs = require('fs');
+const cors = require("cors");
 const index = fs.readFileSync('index.html','UTF-8');
 const data = JSON.parse(fs.readFileSync('data.json','UTF-8'));
 const products = data.products;
 const mongoose = require('mongoose');
 const productRouter = require('./route/product')
 const userRouter = require('./route/user')
+
 console.log('env',process.env.DB_PASSWORD)
 
 //db connection
@@ -24,12 +26,16 @@ async function main() {
 const { type } = require('os');
 
 // const express = require('express');
+
+
 const morgan = require('morgan');
 const server = express();
 server.use(express.static(process.env.PUBLIC_DIR));
 server.use(express.json());
+server.use(cors());
 server.use('/products',productRouter.router);
 server.use('/user',userRouter.router);
+
 
 
 

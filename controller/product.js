@@ -11,7 +11,7 @@
 
 
 exports.getonProduct =async (req,res)=>{
-    const products = await Product.find({price:{$gt:90}});
+    const products = await Product.find({});
        res.json(products);
 }
     
