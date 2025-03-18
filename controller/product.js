@@ -1,6 +1,8 @@
 
  const fs = require('fs');
  const  model = require('../model/product')
+ const mongoose = require('mongoose');
+ 
  
 // // const index = fs.readFileSync('index.html','UTF-8');
 // const data = JSON.parse(fs.readFileSync('data.json','UTF-8'));
@@ -8,16 +10,17 @@
 
 
 
-exports.getonProduct = (req,res)=>{
+exports.getonProduct =async (req,res)=>{
+    const products = await Product.find({price:{$gt:90}});
        res.json(products);
 }
     
 
-exports.getProduct = (req,res)=>{
+exports.getProduct = async (req,res)=>{
     
-    const id = +req.params.id;
-    const product = products.find(p =>p.id===id)
-    res.json(product)
+    const id = req.params.id;
+    const products =  await Product.findById(id);
+    res.json(products)
  }
 
  exports.addProduct = async (req, res) => {
@@ -36,34 +39,45 @@ exports.getProduct = (req,res)=>{
 
 
 
- exports.delProduct = (req,res)=>{
+ exports.delProduct = async(req,res)=>{
     
-    const id = +req.params.id;
-    const productIndex = products.findIndex(p =>p.id===id)
-    const product = products[productIndex];
-
-    products.splice(productIndex,1)
-    res.status(201).json(product);
-    
+    const id = req.params.id;
+    try{
+    const doc = await Product.findOneAndDelete({_id:id})
+    res.status(201).json(doc);
+}
+catch(err){
+    console.log(err)
+    res.status(400).json(err);
+}
 
 
 }
 
-exports.replaceProduct = (req,res)=>{
+exports.replaceProduct = async (req,res)=>{
     
-    const id = +req.params.id;
-    const productIndex = products.findIndex(p =>p.id===id)
-    const product = products[productIndex];
-    products.splice(productIndex,1,{...product,...req.body})
-    res.status(201).json();
+    const id = req.params.id;
+    try{
+    const doc = await Product.findOneAndReplace({_id:id},req.body,{new:true})
+    res.status(201).json(doc);
+}
+catch(err){
+    console.log(err)
+    res.status(400).json(err);
+}
 }
 
-exports.updateproduct = (req,res)=>{
+exports.updateproduct = async (req,res)=>{
     
-    const id = +req.params.id;
-    const productIndex = products.findIndex(p =>p.id===id)
-    products.splice(productIndex,1,{...req.body,id:id})
-    res.status(201).json();
-
-
+    const id = req.params.id;
+    try{
+    const doc = await Product.findOneAndUpdate({_id:id},req.body,{new:true})
+    res.status(201).json(doc);
 }
+catch(err){
+    console.log(err)
+    res.status(400).json(err);
+}
+}
+
+

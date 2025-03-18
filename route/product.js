@@ -15,9 +15,9 @@ router
 
 .delete('/:id',productController.delProduct)
 
-.put('/:id',productController.updateproduct)
+.put('/:id',productController.replaceProduct)
 
-.patch('/:id',productController.replaceProduct)
+.patch('/:id',productController.updateproduct)
 
 
 exports.router = router;
